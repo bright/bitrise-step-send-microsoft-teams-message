@@ -3,7 +3,7 @@ This file is:
 
 The MIT License (MIT)
 
-Copyright (c) 2014 Bitrise
+# Copyright (c) 2014 Bitrise
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -29,13 +29,13 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"os"
 	"strings"
 
+	"github.com/bitrise-io/go-steputils/stepconf"
 	"github.com/bitrise-io/go-utils/log"
-	"github.com/bitrise-tools/go-steputils/stepconf"
 )
 
 // Config ...
@@ -117,8 +117,8 @@ func postMessage(conf Config, msg Message) error {
 		}
 	}()
 
-	if resp.StatusCode != http.StatusOK {
-		body, err := ioutil.ReadAll(resp.Body)
+	if resp.StatusCode != http.StatusOK && resp.StatusCode != http.StatusAccepted {
+		body, err := io.ReadAll(resp.Body)
 		if err != nil {
 			return fmt.Errorf("server error: %s, failed to read response: %s", resp.Status, err)
 		}
